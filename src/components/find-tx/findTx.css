@@ -1,10 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+
+*{
+    font-family: 'Space Mono', monospace;
+}
 body {
-    font-family: 'lato', sans-serif;
 }
 
 .container {
-    max-width: 1500px;
-    min-width: 1400px;
+    max-width: 2000px;
+    min-width: 1700px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 10px;
@@ -15,15 +20,67 @@ h2 {
     font-size: 26px;
     margin: 20px 0;
     text-align: center;
+    margin-left: 39%;
 
     small {
         font-size: 0.5em;
     }
 }
 
+.searchContainer {
+    display: flex;
+    justify-content: center;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    width: 70%;
+}
+
+.searchButtonContainer{
+    display: flex;
+    border: rgb(51, 8, 89) solid 2px;
+    justify-content: center;
+    height: 40px;
+    background-color: rgb(132, 0, 97);
+    border-radius: 12px;
+    width: 100px;
+    align-items: center;
+    padding: 10px 20px;
+    text-align: center;
+    margin-left: 10px;
+    color: white;
+    user-select: none;
+}
+
+.search{
+    display: flex;
+    justify-content: center;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.searchButtonContainer:hover{
+    background-color: rgb(145, 11, 169);
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+.topContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 100px 0 20px 0;
+}
+
+.table-row:hover{
+    outline: 2px solid black;
+}
+
 .responsive-table {
     li {
-        border-radius: 3px;
+        border-radius: 15px;
         padding: 15px 30px;
         display: flex;
         justify-content: space-between;
@@ -131,7 +188,7 @@ h2 {
         transition: opacity 0.3s ease;
         position:absolute;
         left: 9.5%;
-        top: -8%;
+        top: -20%;
     }
     .col-1:hover .tooltip{
         opacity: 1;
@@ -156,7 +213,7 @@ h2 {
     }
 
     .tooltipToken{
-        left: 91%;
+        left: 92%;
     }
 
     .col-2:hover .tooltipTime{

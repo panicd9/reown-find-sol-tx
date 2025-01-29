@@ -268,7 +268,7 @@ const FindTx = () => {
         };
 
         fetchAllTokenSymbols();
-    }, []);
+    }, [transactions]);
 
     let previousSignature = null;
     let isAlternate = false;

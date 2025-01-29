@@ -276,7 +276,12 @@ const FindTx = () => {
     let isAlternate = false;
     return (
         <div className="container">
-            <h2>Transaction Table</h2>
+            <div className='topContainer'>
+                <div className='searchContainer'>
+                    <input type="text" className='search' placeholder='Search...'></input>
+                </div>
+                <div className='searchButtonContainer'>Search</div>
+            </div>
             <ul className="responsive-table">
                 <li className="table-header">
                     <div className="col" style={{ position: "absolute", left: "3%" }}>Signature</div>
@@ -284,7 +289,7 @@ const FindTx = () => {
                     <div className="col" style={{ position: "absolute", left: "31%" }}>Action</div>
                     <div className="col" style={{ position: "absolute", left: "46%" }}>From</div>
                     <div className="col" style={{ position: "absolute", left: "62%" }}>To</div>
-                    <div className="col" style={{ position: "absolute", left: "74%" }}>Amount</div>
+                    <div className="col" style={{ position: "absolute", left: "75%" }}>Amount</div>
                     <div className="col" style={{ position: "absolute", left: "90%" }}>Token</div>
                 </li>
 

@@ -44,7 +44,12 @@ const modal = createAppKit({
     socials: ['google', 'x', 'github', 'discord', 'farcaster'],
     emailShowWallets: true
   },
-  themeMode: 'dark'
+  themeMode: 'light',
+  themeVariables: {
+    '--w3m-accent': '#2B3440',
+    '--w3m-color-mix': '#00BB7F',
+    '--w3m-color-mix-strength': 30,
+  }
 })
 
 export function UiLayout({ children, links }: { children: ReactNode; links: { label: string; path: string }[] }) {

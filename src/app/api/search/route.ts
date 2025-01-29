@@ -17,19 +17,19 @@ export async function GET(request: NextRequest) {
         });
     }
 
-    const completion = await openai.beta.chat.completions.parse({
-        model: "gpt-4o-mini",
-        messages: [
-            { role: "developer", content: ""}
-        ],
-        store: true,
-        response_format: { type: "json_schema", json_schema: schema, strict: true }
-    })
+    // const completion = await openai.beta.chat.completions.parse({
+    //     model: "gpt-4o-mini",
+    //     messages: [
+    //         { role: "developer", content: ""}
+    //     ],
+    //     store: true,
+    //     response_format: { type: "json_schema", json_schema: schema}
+    // })
 
-    if (completion.choices[0].finish_reason === "length") {
-        // Handle the case where the model did not return a complete response
-        throw new Error("Incomplete response");
-      }
+    // if (completion.choices[0].finish_reason === "length") {
+    //     // Handle the case where the model did not return a complete response
+    //     throw new Error("Incomplete response");
+    //   }
 
     // Example mock response
     const results = mockResults;

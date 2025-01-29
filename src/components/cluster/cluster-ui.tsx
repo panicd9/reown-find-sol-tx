@@ -100,7 +100,7 @@ export function ClusterUiModal({ hideModal, show }: { hideModal: () => void; sho
     >
       <input
         type="text"
-        placeholder"Name"
+        placeholder="Name"
         className="input input-bordered w-full"
         value={name}
         onChange={(e) => setName(e.target.value)}

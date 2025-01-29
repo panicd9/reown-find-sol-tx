@@ -10,6 +10,43 @@ import { AccountChecker } from '../account/account-ui'
 import { ClusterChecker, ClusterUiSelect, ExplorerLink } from '../cluster/cluster-ui'
 import { WalletButton } from '../solana/solana-provider'
 
+import { SolanaAdapter } from '@reown/appkit-adapter-solana/react'
+import { solana, solanaTestnet, solanaDevnet } from '@reown/appkit/networks'
+import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets'
+import { createAppKit } from "@reown/appkit"
+
+export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID
+
+if (!projectId) {
+  throw new Error('Project Id is not defined.')
+}
+
+export const networks = [solana, solanaTestnet, solanaDevnet]
+
+const metadata = {
+  name: "Find SOL Tx",
+  description: "Search Solana transactions using human language",
+  url: "https://exampleapp.com",
+  icons: ["https://avatars.githubusercontent.com/u/37784886"]
+}
+
+export const solanaWeb3JsAdapter = new SolanaAdapter({
+  wallets: [new PhantomWalletAdapter(), new SolflareWalletAdapter()]
+})
+
+const modal = createAppKit({
+  adapters: [solanaWeb3JsAdapter],
+  projectId,
+  networks: [solana, solanaTestnet, solanaDevnet],
+  features: {
+    analytics: true,
+    email: true,
+    socials: ['google', 'x', 'github', 'discord', 'farcaster'],
+    emailShowWallets: true
+  },
+  themeMode: 'dark'
+})
+
 export function UiLayout({ children, links }: { children: ReactNode; links: { label: string; path: string }[] }) {
   const pathname = usePathname()
 

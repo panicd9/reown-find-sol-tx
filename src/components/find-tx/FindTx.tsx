@@ -2,6 +2,7 @@
 // FindTx.tsx
 import React, { useEffect, useState } from 'react';
 import "./findTx.css";
+import { useAppKitAccount } from "@reown/appkit/react";
 
 interface Entry {
 	signature: string;
@@ -228,7 +229,17 @@ const FindTx = () => {
     const [query, setQuery] = useState('Test query');
     const [transactions, setTransactions] = useState<Entry[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { address, isConnected, caipAddress, status, embeddedWalletInfo } = useAppKitAccount()
 
+    useEffect(() => {
+        console.log('address:', address);
+        console.log('isConnected:', isConnected);
+        console.log('caipAddress:', caipAddress);
+        console.log('status:', status);
+        console.log('embeddedWalletInfo:', embeddedWalletInfo);
+    }, [address, isConnected, caipAddress, status, embeddedWalletInfo])
+
+    console.log()
     // Fetch search results whenever the query changes
     useEffect(() => {
         const fetchSearchResults = async () => {

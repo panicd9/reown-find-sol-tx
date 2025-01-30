@@ -223,6 +223,32 @@ function formatTimestamp(timestamp) {
     return `${day}.${month}.${year}. ${hours}:${minutes}:${seconds}`;
 }
 
+function downloadCSV(entries){
+
+    if (!entries.length) return;
+
+    // Define CSV headers
+    const headers = Object.keys(entries[0]).join(",");
+
+    // Convert entries array to CSV rows
+    const csvRows = entries.map(entry =>
+        Object.values(entry).map(value => (value !== undefined ? `${value}` : "")).join(",")
+    );
+
+    // Combine headers and rows
+    const csvContent = "data:text/csv;charset=utf-8," + [headers, ...csvRows].join("\n");
+
+    // Create a download link
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "entries.csv");
+
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 
 const FindTx = () => {
     const [tokenSymbols, setTokenSymbols] = useState<{ [key: string]: string }>({});
@@ -275,16 +301,18 @@ const FindTx = () => {
                     <input type="text" className='search' placeholder='Search...'onChange={(e) => setQuery(e.target.value)}></input>
                 </div>
                 <div className='searchButtonContainer' onClick={fetchSearchResults}>Search</div>
+                <div className='searchButtonContainer'>Search</div>
+                <button className="downloadBtn" onClick={() => downloadCSV(transactions)}>Export CSV</button>
             </div>
             <ul className="responsive-table">
                 <li className="table-header">
-                    <div className="col" style={{ position: "absolute", left: "3%" }}>Signature</div>
-                    <div className="col" style={{ position: "absolute", left: "19%" }}>Time</div>
-                    <div className="col" style={{ position: "absolute", left: "31%" }}>Action</div>
-                    <div className="col" style={{ position: "absolute", left: "46%" }}>From</div>
-                    <div className="col" style={{ position: "absolute", left: "62%" }}>To</div>
-                    <div className="col" style={{ position: "absolute", left: "75%" }}>Amount</div>
-                    <div className="col" style={{ position: "absolute", left: "90%" }}>Token</div>
+                    <div className="col headerCol" style={{left: "2%"}}>Signature</div>
+                    <div className="col headerCol" style={{left: "19%"}}>Time</div>
+                    <div className="col headerCol" style={{left: "30%"}}>Action</div>
+                    <div className="col headerCol" style={{left: "46%"}}>From</div>
+                    <div className="col headerCol" style={{left: "62%"}}>To</div>
+                    <div className="col headerCol" style={{left: "74%"}}>Amount</div>
+                    <div className="col headerCol" style={{left: "88%"}}>Token</div>
                 </li>
 
                 {transactions.map((tx, index) => {
@@ -331,10 +359,10 @@ const FindTx = () => {
                             </div>
                             <div className="col col-7-1" data-label="Token">
                                 <div className='col-7'>
-                                    <a href={`https://www.solscan.io/account/${tx.token}`} className='signatureLink'>{shorten(tx.token)}</a>
+                                    <a href={`https://www.solscan.io/account/${tx.token}`} className='signatureLink'>{isLoading ? "Loading..." : tokenSymbols[tx.token] || "Unknown"}</a>
                                     <img src="/copy.png" alt="" className='copyImage' onClick={() => copyToClipboard(tx.token)} />
                                     <div className="tooltip tooltipToken">
-                                        {isLoading ? "Loading..." : tokenSymbols[tx.token] || "Unknown"}
+                                        {tx.token}
                                     </div>
                                 </div>
                             </div>

@@ -10,7 +10,6 @@ import * as Filters from "../../helpers/schema";
 import { getAccount, getMint } from "@solana/spl-token";
 // import { applyFilters, fetchTransactionsAndApplyFilters } from '../../helpers/filtering';
 
-const openai = new OpenAI();
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams

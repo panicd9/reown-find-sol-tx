@@ -1,57 +1,16 @@
-# find-sol-tx
+# Find SOL TX - powered by Reown
 
-### Usage
+## Demo video
+https://docsend.com/v/knk5k/find-sol-tx
 
-Use the [create-solana-dapp](https://github.com/solana-developers/create-solana-dapp) tool to start a new project based on this template (recommended).
+### Idea behind the project
+Enabling people to search for transactions on Solana using natural language—whether they are developers looking for a transaction interacting with a specific program, accountants searching for a simple transfer, or beginners in the Web3 space who find it easier to use everyday language.
 
-```shell
-# created an npm based project
-npx create-solana-dapp --template find-sol-tx
-# created an pnpm based project
-pnpx create-solana-dapp --template find-sol-tx
-# created an yarn based project
-yarn create solana-dapp --template find-sol-tx
-```
+### How to start
+`npm run dev`
 
-### Prerequisites
-
--   Node v18.18.0 or higher
-
-### Manual installation
-
-#### Clone the repo
-
-```shell
-git clone https://github.com/solana-developers/find-sol-tx.git
-cd find-sol-tx
-```
-
-#### Install Dependencies
-
-```shell
-pnpm install
-```
-
-#### Start the web app
-
-```
-pnpm dev
-```
-
-## Apps
-
-### web
-
-This is a Next.js web app to get you started on interacting with the Solana network.
-
-Start the web app
-
-```shell
-pnpm dev
-```
-
-Build the web app
-
-```shell
-pnpm build
-```
+### Some of future plans
+- Add more filtering options
+- Improve LLM time context for more complex time filtering like this month and this year....
+- Optimize system for faster transaction finding
+- Dark Theme.

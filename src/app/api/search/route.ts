@@ -10,6 +10,7 @@ import * as Filters from "../../helpers/schema";
 import { getAccount, getMint } from "@solana/spl-token";
 // import { applyFilters, fetchTransactionsAndApplyFilters } from '../../helpers/filtering';
 
+const openai = new OpenAI();
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
                 "content": [
                     {
                         "type": "text",
-                        "text": "Parse human language used for searching/filtering transactions on Solana blockchain and return Filter JSON object in required format.  If no address is provided use \"THIS_ADDRESS\" for account field. If user dont define specific Token but inputs \"stablecoin\" for tokenFilter return only 1 element with \"ALL_STABLECOINS\" for tokenFillter.tokenAddress field and \"null\" for tokenFilter.direction. If type is SOLTransfer, set tokenFilter.tokenAddress to \"NATIVE_SOL\".  You need time context. Time NOW is 1738187567. If user needs transactions from last X days, set timeRange.end to \"null\" and set timeRange.start at now minus X represented in unix time.\n1 Hour = 3600 Seconds\n1 Day = 86400 Seconds\n1 Week\t= 604800 Seconds\n1 Month (30.44 days) = 2629743 Seconds\n1 Year (365.24 days) = 31556926 Seconds"
+                        "text": "Parse human language used for searching/filtering transactions on Solana blockchain and return Filter JSON object in required format.  If no address is provided use \\\"THIS_ADDRESS\\\" for account field. If user dont define specific Token but inputs \\\"stablecoin\\\" for tokenFilter return only 1 element with \\\"ALL_STABLECOINS\\\" for tokenFillter.tokenAddress field and \\\"null\\\" for tokenFilter.direction. If type is SOLTransfer, set tokenFilter.tokenAddress to \\\"NATIVE_SOL\\\".  You need time context. Time NOW is 1738187567. If user needs transactions from last X days, set timeRange.end to \\\"null\\\" and set timeRange.start at now minus X represented in unix time.\\n1 Hour = 3600 Seconds\\n1 Day = 86400 Seconds\\n1 Week\\t= 604800 Seconds\\n1 Month (30.44 days) = 2629743 Seconds\\n1 Year (365.24 days) = 31556926 Seconds"
                     }
                 ]
             },
@@ -48,7 +49,7 @@ export async function GET(request: NextRequest) {
                 "content": [
                     {
                         "type": "text",
-                        "text": "All stablecoin transactions last 30 days"
+                        "text": "All receving stablecoin transactions last 30 days"
                     }
                 ]
             },
@@ -57,7 +58,7 @@ export async function GET(request: NextRequest) {
                 "content": [
                     {
                         "type": "text",
-                        "text": "{\n  \"account\": \"THIS_ADDRESS\",\n  \"types\": [\"TokenTransfer\"],\n  \"programs\": null,\n  \"timeRange\": {\n    \"start\": 1735507092,\n    \"end\": null\n  },\n  \"tokenFilter\": [\n    {\n      \"tokenAddress\": \"ALL_STABLECOINS\",\n      \"amountLessThan\": null,\n      \"amountGreaterThan\": null,\n      \"direction\": null,\n    }\n  ],\n  \"status\": \"successful\",\n  \"memo\": null,\n  \"feeFilter\": null,\n  \"instructionCountFilter\": null,\n  \"txNum\": null\n}"
+                        "text": "{\n  \"memo\": null,\n  \"txNum\": null,\n  \"types\": [\"TokenTransfer\"],\n  \"status\": \"successful\",\n  \"account\": \"THIS_ADDRESS\",\n  \"programs\": null,\n  \"feeFilter\": null,\n  \"timeRange\": {\n    \"end\": null,\n    \"start\": 1735595567\n  },\n  \"tokenFilter\": [\n    {\n      \"direction\": \"received\",\n      \"tokenAddress\": \"ALL_STABLECOINS\",\n      \"amountLessThan\": null,\n      \"amountGreaterThan\": null\n    }\n  ],\n  \"instructionCountFilter\": null\n}"
                     }
                 ]
             },
@@ -66,7 +67,7 @@ export async function GET(request: NextRequest) {
                 "content": [
                     {
                         "type": "text",
-                        "text": "Last 3 transactions sending USDT"
+                        "text": "Last 3 transactions of B3HaLQyCbwQ5Kmwvj7PxS2no8sTB2yyijg4GA4dbbXMk sending more than 20 USDT"
                     }
                 ]
             },
@@ -75,7 +76,7 @@ export async function GET(request: NextRequest) {
                 "content": [
                     {
                         "type": "text",
-                        "text": "{\n  \"account\": \"THIS_ADDRESS\",\n  \"types\": [\"TokenTransfer\"],\n  \"programs\": null,\n  \"timeRange\": {\n    \"start\": null,\n    \"end\": null\n  },\n  \"tokenFilter\": [\n    {\n      \"tokenAddress\": \"USDT\",\n      \"amountLessThan\": null,\n      \"amountGreaterThan\": null,\n      \"direction\": \"sent\"\n    }\n  ],\n  \"status\": \"successful\",\n  \"memo\": null,\n  \"feeFilter\": null,\n  \"instructionCountFilter\": null,\n  \"txNum\": 3\n}"
+                        "text": "{\n  \"memo\": null,\n  \"txNum\": 3,\n  \"types\": [\"TokenTransfer\"],\n  \"status\": \"successful\",\n  \"account\": \"B3HaLQyCbwQ5Kmwvj7PxS2no8sTB2yyijg4GA4dbbXMk\",\n  \"programs\": null,\n  \"feeFilter\": null,\n  \"timeRange\": null,\n  \"tokenFilter\": [\n    {\n      \"direction\": \"sent\",\n      \"tokenAddress\": \"USDT\",\n      \"amountLessThan\": null,\n      \"amountGreaterThan\": 20\n    }\n  ],\n  \"instructionCountFilter\": null\n}"
                     }
                 ]
             },
@@ -93,7 +94,70 @@ export async function GET(request: NextRequest) {
                 "content": [
                     {
                         "type": "text",
-                        "text": "{\n  \"account\": \"87egKZwVkDfgHP7jakP4C5XERz5MaU8owYNG4rQzQDN6\",\n  \"types\": [\n    \"SOLTransfer\"\n  ],\n  \"programs\": null,\n  \"timeRange\": {\n    \"start\": null,\n    \"end\": null\n  },\n  \"tokenFilter\": [\n    {\n      \"tokenAddress\": \"NATIVE_SOL\",\n      \"amountLessThan\": null,\n      \"amountGreaterThan\": 0.01,\n      \"direction\": \"sent\"\n    }\n  ],\n  \"status\": \"successful\",\n  \"memo\": null,\n  \"feeFilter\": null,\n  \"instructionCountFilter\": null,\n  \"txNum\": null\n}"
+                        "text": "{\n  \"memo\": null,\n  \"txNum\": null,\n  \"types\": [\n    \"SOLTransfer\"\n  ],\n  \"status\": \"successful\",\n  \"account\": \"87egKZwVkDfgHP7jakP4C5XERz5MaU8owYNG4rQzQDN6\",\n  \"programs\": null,\n  \"feeFilter\": null,\n  \"timeRange\": null,\n  \"tokenFilter\": [\n    {\n      \"direction\": \"sent\",\n      \"tokenAddress\": \"NATIVE_SOL\",\n      \"amountLessThan\": null,\n      \"amountGreaterThan\": 0.01\n    }\n  ],\n  \"instructionCountFilter\": null\n}"
+                    }
+                ]
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "Last 5 transactions with more than 3 instructions"
+                    }
+                ]
+            },
+            {
+                "role": "assistant",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "{\n  \"memo\": null,\n  \"txNum\": 5,\n  \"types\": null,\n  \"status\": \"successful\",\n  \"account\": \"THIS_ADDRESS\",\n  \"programs\": null,\n  \"feeFilter\": null,\n  \"timeRange\": null,\n  \"tokenFilter\": null,\n  \"instructionCountFilter\": {\n    \"lessThan\": null,\n    \"greaterThan\": 3\n  }\n}"
+                    }
+                ]
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "Transactions with more than 50000 fee"
+                    }
+                ]
+            },
+            {
+                "role": "assistant",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "{\n  \"memo\": null,\n  \"txNum\": null,\n  \"types\": null,\n  \"status\": \"successful\",\n  \"account\": \"THIS_ADDRESS\",\n  \"programs\": null,\n  \"feeFilter\": {\n    \"feeLessThan\": null,\n    \"feeGreaterThan\": 50000\n  },\n  \"timeRange\": null,\n  \"tokenFilter\": null,\n  \"instructionCountFilter\": null\n}"
+                    }
+                ]
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "Transactions with memo \"PENGU\""
+                    }
+                ]
+            },
+            {
+                "role": "assistant",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "{\n  \"memo\": \"PENGU\",\n  \"txNum\": null,\n  \"types\": null,\n  \"status\": \"successful\",\n  \"account\": \"THIS_ADDRESS\",\n  \"programs\": null,\n  \"feeFilter\": null,\n  \"timeRange\": null,\n  \"tokenFilter\": null,\n  \"instructionCountFilter\": null\n}"
+                    }
+                ]
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": query,
                     }
                 ]
             }
@@ -135,14 +199,26 @@ export async function GET(request: NextRequest) {
         }
     }
 
+    for (const token of transactionFilter.tokenFilter || []) {
+        if (token.tokenAddress === 'NATIVE_SOL') {
+            if (token.amountGreaterThan !== null) {
+                token.amountGreaterThan *= LAMPORTS_PER_SOL;
+            }
+            if (token.amountLessThan !== null) {
+                token.amountLessThan *= LAMPORTS_PER_SOL;
+            }
+        }
+    }
+
     if (transactionFilter.txNum === null) {
         transactionFilter.txNum = 5;
     }
 
+    console.log('Filter: ', transactionFilter);
+
     let results = await fetchTransactionsAndApplyFilters(transactionFilter);
     // let results = mockResults;
 
-    console.log('Filter: ', transactionFilter);
     console.log('Results: ', results);
 
     return new Response(JSON.stringify({ query, results }), {
@@ -277,12 +353,12 @@ const mockResults = [
 const connection = new Connection(`https://mainnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_API_KEY}`, "confirmed");
 
 async function getTransactionsForAddress(address: string): Promise<ParsedTransactionWithMeta[]> {
-    
+
     const publicKey = new PublicKey(address);
 
     // Step 1: Get signatures for the address
     const signatures = await connection.getSignaturesForAddress(publicKey, {
-        limit: 100, // Adjust the limit as needed
+        limit: 70, // Adjust the limit as needed
     });
 
     // console.log("Signatures:", signatures);
@@ -314,28 +390,68 @@ interface Entry {
     amount: number;
     token: string;
     decimals?: number;
+    memo?: string;
+    fee?: number;
 }
 
-export async function applyFilters(filter: Filters.Filter, txs: ParsedTransactionWithMeta[]): Promise<Entry[]> {
+export async function applyFilters(filter: Filters.Filter): Promise<Entry[]> {
+    // Step 1: Get signatures for the address
+    const signatures = await connection.getSignaturesForAddress(new PublicKey(filter.account), {
+        limit: 100, // Adjust the limit as needed
+    });
+
+    // console.log("Signatures:", signatures);
+
+    // Step 2: Get transaction details for each signature
+    // const transactions = [];
+    // for (const signatureInfo of signatures) {
+    //     const tx = await connection.getParsedTransaction(signatureInfo.signature, {
+    //         commitment: "confirmed",
+    //         maxSupportedTransactionVersion: 0,
+    //     });
+    //     transactions.push(tx);
+    // }
+
     const txTargetNum = filter.txNum || 10;
     const typeFilter = filter.types
-    const timeRangeFilter: Filters.TimeRange = {
-        start: filter.timeRange?.start || 0,
-        end: filter.timeRange?.end || Date.now() / 1000
-    }
+    const timeRangeFilter = filter.timeRange
     const status = filter.status || 'successful';
-    const account = filter.account || 'B3HaLQyCbwQ5Kmwvj7PxS2no8sTB2yyijg4GA4dbbXMk';
-    const tokenFilter = filter.tokenFilter || [];
+    const account = filter.account;
+    const tokenFilter = filter.tokenFilter;
+    const memoFilter = filter.memo;
+    const feeFilter = filter.feeFilter;
+    let instructionCountFilter = filter.instructionCountFilter;
 
     let foundEntriesNum = 0;
     let foundEntries: Entry[] = [];
 
     // let filteredTxs: [] = [];
     // let noTxsLeft = false;
-    console.log("Tx length: ", txs.length);
-    for (let i = 0; i < txs.length && foundEntriesNum < txTargetNum; i++) {
-        const tx = txs[i];
+    for (let i = 0; i < signatures.length && foundEntriesNum < txTargetNum; i++) {
+        const tx = await connection.getParsedTransaction(signatures[i].signature, {
+            commitment: "confirmed",
+            maxSupportedTransactionVersion: 0,
+        });
         // console.log(`\nChecking transaction #${i}`);
+        if (feeFilter) {
+            if (tx.meta?.fee !== null && (feeFilter.feeGreaterThan !== null && tx.meta?.fee < feeFilter.feeGreaterThan || (feeFilter.feeLessThan !== null && tx.meta.fee > feeFilter.feeLessThan))) continue;
+
+            let entry = {
+                signature: tx.transaction.signatures[0],
+                time: tx.blockTime ?? 0,
+                action: "FEE",
+                from: "",
+                to: "",
+                amount: 0,
+                token: "",
+                fee: tx.meta?.fee || 0
+            }
+
+            foundEntries.push(entry);
+            foundEntriesNum++;
+            continue;
+        }
+
         for (const instruction of tx.transaction.message.instructions) {
             let entry: Entry | null = null;
             if (typeFilter) {
@@ -344,6 +460,41 @@ export async function applyFilters(filter: Filters.Filter, txs: ParsedTransactio
             }
             if (timeRangeFilter) {
                 if (tx.blockTime && (timeRangeFilter.start !== null && tx.blockTime < timeRangeFilter.start || (timeRangeFilter.end !== null && tx.blockTime > timeRangeFilter.end))) continue;
+            }
+            if (tokenFilter) {
+                let matchedFilter = false;
+                for (const token of tokenFilter) {
+                    // if (entry === null) continue;
+                    if (token.tokenAddress !== entry?.token) continue;
+                    if (token.amountLessThan !== null && entry.amount >= token.amountLessThan) continue;
+                    if (token.amountGreaterThan !== null && entry.amount <= token.amountGreaterThan) {
+                        continue
+                    };
+                    if (token.direction !== null && token.direction !== 'sent' && token.direction !== 'received') continue;
+                    if (token.direction === 'sent' && entry.from !== account) continue;
+                    if (token.direction === 'received' && entry.to !== account) continue;
+
+                    matchedFilter = true;
+                }
+
+                if (!matchedFilter) continue;
+            }
+            if (memoFilter) {
+                if (instruction.program === "spl-memo") {
+                    let memo: string = instruction.parsed;
+                    if (memo.toLowerCase().includes(memoFilter.toLowerCase())) {
+                        entry = {
+                            signature: tx.transaction.signatures[0],
+                            time: tx.blockTime ?? 0,
+                            action: "MEMO",
+                            from: "",
+                            to: "",
+                            amount: 0,
+                            token: "",
+                            memo: memo
+                        }
+                    }
+                }
             }
             if (entry) {
                 foundEntries.push(entry);
@@ -362,25 +513,60 @@ export async function applyFilters(filter: Filters.Filter, txs: ParsedTransactio
                 if (timeRangeFilter) {
                     if (tx.blockTime && (timeRangeFilter.start !== null && tx.blockTime < timeRangeFilter.start || (timeRangeFilter.end !== null && tx.blockTime > timeRangeFilter.end))) continue;
                 }
-                if (entry) {
-                    foundEntries.push(entry);
-                    foundEntriesNum++;
+                if (tokenFilter) {
+                    let matchedFilter = false;
+                    for (const token of tokenFilter) {
+                        // if (entry === null) continue;
+                        if (token.tokenAddress !== entry?.token) continue;
+                        if (token.amountLessThan !== null && entry.amount >= token.amountLessThan) continue;
+                        if (token.amountGreaterThan !== null && entry.amount <= token.amountGreaterThan) {
+                            continue
+                        };
+                        if (token.direction !== null && token.direction !== 'sent' && token.direction !== 'received') continue;
+                        if (token.direction === 'sent' && entry.from !== account) continue;
+                        if (token.direction === 'received' && entry.to !== account) continue;
+
+                        matchedFilter = true;
+                    }
+
+                    if (!matchedFilter) continue;
+                }
+                if (memoFilter) {
+                    if (instruction.program === "spl-memo") {
+                        let memo: string = instruction.parsed;
+                        if (memo.toLowerCase().includes(memoFilter.toLowerCase())) {
+                            entry = {
+                                signature: tx.transaction.signatures[0],
+                                time: tx.blockTime ?? 0,
+                                action: "MEMO",
+                                from: "",
+                                to: "",
+                                amount: 0,
+                                token: "",
+                                memo: memo
+                            }
+                        }
+                    }
+                    if (entry) {
+                        // console.log("TEST: ", entry, tokenFilter[0].amountGreaterThan);
+                        foundEntries.push(entry);
+                        foundEntriesNum++;
+                    }
                 }
             }
         }
     }
-
     return foundEntries;
 }
 
 export async function fetchTransactionsAndApplyFilters(filter: Filters.Filter): Promise<Entry[]> {
-    let txs = await getTransactionsForAddress(filter.account);
-    return applyFilters(filter, txs);
+    // let txs = await getTransactionsForAddress(filter.account);
+    return applyFilters(filter);
 }
 
 async function checkTypeFilterAndReturnEntry(typeFilter: string[], tx: ParsedTransactionWithMeta, instruction: ParsedInstruction | PartiallyDecodedInstruction, account: string): Promise<Entry | null> {
     const connection = new Connection(`https://mainnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_API_KEY}`, "confirmed");
-    
+
     let entry: Entry | null = null
     for (const type of typeFilter) {
         switch (type) {
@@ -433,7 +619,7 @@ async function checkTypeFilterAndReturnEntry(typeFilter: string[], tx: ParsedTra
                         to: destOwner,
                         fromTokenAccount: instruction.parsed.info.source,
                         toTokenAccount: instruction.parsed.info.destination,
-                        amount: instruction.parsed.info.amount ?? instruction.parsed.info.tokenAmount.amount,
+                        amount: instruction.parsed.info?.tokenAmount?.uiAmount ?? Number(instruction.parsed.info.amount) / Math.pow(10, decimals ?? 0),
                         decimals: decimals ?? undefined,
                         token: mint.toString()
                     }
@@ -450,6 +636,11 @@ async function checkTypeFilterAndReturnEntry(typeFilter: string[], tx: ParsedTra
                     // console.log(`\nTransaction #${foundEntriesNum} sig: ${tx.transaction.signatures[0]}:`);
                     // filteredTxs.push(tx);
 
+                    let source = instruction.parsed.info.source;
+                    let dest = instruction.parsed.info.destination;
+
+                    if (source !== account && dest !== account) continue
+
                     entry = {
                         signature: tx.transaction.signatures[0],
                         time: tx.blockTime ?? 0,
@@ -458,9 +649,9 @@ async function checkTypeFilterAndReturnEntry(typeFilter: string[], tx: ParsedTra
                         to: instruction.parsed.info.destination,
                         fromTokenAccount: "/",
                         toTokenAccount: "/",
-                        amount: instruction.parsed.info.lamports / LAMPORTS_PER_SOL,
+                        amount: instruction.parsed.info.lamports,
                         decimals: 9,
-                        token: "NATIVE SOL"
+                        token: "NATIVE_SOL"
                     }
 
                     // foundEntriesNum++;

@@ -5,17 +5,17 @@ import "./findTx.css";
 import { useAppKitAccount } from "@reown/appkit/react";
 
 interface Entry {
-	signature: string;
-	slot?: number;
-	time: number;
-	action: string;
-	from: string;
-	fromTokenAccount?: string;
-	to: string;
-	toTokenAccount?: string;
-	amount: number;
-	token: string;
-	decimals?: number;
+    signature: string;
+    slot?: number;
+    time: number;
+    action: string;
+    from: string;
+    fromTokenAccount?: string;
+    to: string;
+    toTokenAccount?: string;
+    amount: number;
+    token: string;
+    decimals?: number;
 }
 
 const stablecoinMints: { [key: string]: string } = {
@@ -223,7 +223,7 @@ function formatTimestamp(timestamp) {
     return `${day}.${month}.${year}. ${hours}:${minutes}:${seconds}`;
 }
 
-function downloadCSV(entries){
+function downloadCSV(entries) {
 
     if (!entries.length) return;
 
@@ -298,21 +298,20 @@ const FindTx = () => {
         <div className="container">
             <div className='topContainer'>
                 <div className='searchContainer'>
-                    <input type="text" className='search' placeholder='Search...'onChange={(e) => setQuery(e.target.value)}></input>
+                    <input type="text" className='search' placeholder='Search...' onChange={(e) => setQuery(e.target.value)}></input>
                 </div>
                 <div className='searchButtonContainer' onClick={fetchSearchResults}>Search</div>
-                <div className='searchButtonContainer'>Search</div>
                 <button className="downloadBtn" onClick={() => downloadCSV(transactions)}>Export CSV</button>
             </div>
             <ul className="responsive-table">
                 <li className="table-header">
-                    <div className="col headerCol" style={{left: "2%"}}>Signature</div>
-                    <div className="col headerCol" style={{left: "19%"}}>Time</div>
-                    <div className="col headerCol" style={{left: "30%"}}>Action</div>
-                    <div className="col headerCol" style={{left: "46%"}}>From</div>
-                    <div className="col headerCol" style={{left: "62%"}}>To</div>
-                    <div className="col headerCol" style={{left: "74%"}}>Amount</div>
-                    <div className="col headerCol" style={{left: "88%"}}>Token</div>
+                    <div className="col headerCol" style={{ left: "2%" }}>Signature</div>
+                    <div className="col headerCol" style={{ left: "19%" }}>Time</div>
+                    <div className="col headerCol" style={{ left: "30%" }}>Action</div>
+                    <div className="col headerCol" style={{ left: "46%" }}>From</div>
+                    <div className="col headerCol" style={{ left: "62%" }}>To</div>
+                    <div className="col headerCol" style={{ left: "74%" }}>Amount</div>
+                    <div className="col headerCol" style={{ left: "88%" }}>Token</div>
                 </li>
 
                 {transactions.map((tx, index) => {
@@ -354,12 +353,16 @@ const FindTx = () => {
                             </div>
                             <div className="col col-6" data-label="Amount">
                                 {tx.amount
-                                    ? `${parseFloat((parseFloat(tx.amount) / Math.pow(10, tx.decimals)).toFixed(5))}`
+                                    ? tx.action === "TOKEN TRANSFER"
+                                        ? `${tx.amount}`
+                                        : `${(parseFloat(tx.amount) / Math.pow(10, tx.decimals)).toFixed(7)}`
                                     : "N/A"}
                             </div>
                             <div className="col col-7-1" data-label="Token">
                                 <div className='col-7'>
-                                    <a href={`https://www.solscan.io/account/${tx.token}`} className='signatureLink'>{isLoading ? "Loading..." : tokenSymbols[tx.token] || "Unknown"}</a>
+                                    <a href={`https://www.solscan.io/account/${tx.token}`} className='signatureLink'>
+                                        {isLoading ? "Loading..." : (tx.action === "SOL TRANSFER" ? "SOL" : tokenSymbols[tx.token] || "Unknown")}
+                                    </a>
                                     <img src="/copy.png" alt="" className='copyImage' onClick={() => copyToClipboard(tx.token)} />
                                     <div className="tooltip tooltipToken">
                                         {tx.token}

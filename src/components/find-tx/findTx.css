@@ -41,13 +41,13 @@ h2 {
     border: rgb(51, 8, 89) solid 2px;
     justify-content: center;
     height: 40px;
-    background-color: rgb(132, 0, 97);
+    background-color: rgb(7,132,195);
     border-radius: 12px;
     width: 100px;
     align-items: center;
     padding: 10px 20px;
     text-align: center;
-    margin-left: 10px;
+    margin-left: 20px;
     color: white;
     user-select: none;
 }
@@ -62,8 +62,14 @@ h2 {
     padding: 10px 20px;
 }
 
+.downloadBtn:hover{
+    background-color: rgb(8, 4, 39);
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+
 .searchButtonContainer:hover{
-    background-color: rgb(145, 11, 169);
+    background-color: rgb(2, 28, 41);
     transition-duration: 0.2s;
     cursor: pointer;
 }
@@ -76,6 +82,29 @@ h2 {
 
 .table-row:hover{
     outline: 2px solid black;
+}
+
+.downloadBtn{
+    display: flex;
+    justify-content: center;
+    height: 40px;
+    background-color: rgb(15, 8, 82);
+    border-radius: 12px;
+    width: 150px;
+    align-items: center;
+    padding: 10px 20px;
+    text-align: center;
+    margin-left: 10px;
+    color: white;
+    user-select: none;
+    border: rgb(0, 0, 0) solid 2px;
+    margin-left: 200px;
+}
+
+.headerCol{
+    position: absolute;
+    font-size: 20px;
+    font-weight:900;
 }
 
 .responsive-table {
@@ -189,6 +218,7 @@ h2 {
         position:absolute;
         left: 9.5%;
         top: -20%;
+        min-height: 28px;
     }
     .col-1:hover .tooltip{
         opacity: 1;
@@ -235,6 +265,7 @@ h2 {
         opacity: 1;
         visibility: visible; 
     }
+
     @media all and (max-width: 767px) {
         .table-header {
             display: none;

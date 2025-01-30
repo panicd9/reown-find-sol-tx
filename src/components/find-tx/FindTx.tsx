@@ -232,26 +232,20 @@ const FindTx = () => {
     const { address, isConnected, caipAddress, status, embeddedWalletInfo } = useAppKitAccount()
 
     // Fetch search results whenever the query changes
-    useEffect(() => {
-        const fetchSearchResults = async () => {
-            try {
-                const res = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+    const fetchSearchResults = async () => {
+        try {
+            const res = await fetch(`api/search?address=${address}&query=${encodeURIComponent(query)}`);
 
-                if (!res.ok) {
-                    const errorData = await res.json();
-                    return;
-                }
-
-                const data = await res.json();
-                setTransactions(data.results || []);
-            } catch (err) {
+            if (!res.ok) {
+                const errorData = await res.json();
+                return;
             }
-        };
 
-        if (query) {
-            fetchSearchResults();
+            const data = await res.json();
+            setTransactions(data.results || []);
+        } catch (err) {
         }
-    }, [query]); // Dependency array: runs whenever `query` changes
+    };
 
     // Preload all token symbols
     useEffect(() => {
@@ -278,9 +272,9 @@ const FindTx = () => {
         <div className="container">
             <div className='topContainer'>
                 <div className='searchContainer'>
-                    <input type="text" className='search' placeholder='Search...'></input>
+                    <input type="text" className='search' placeholder='Search...'onChange={(e) => setQuery(e.target.value)}></input>
                 </div>
-                <div className='searchButtonContainer'>Search</div>
+                <div className='searchButtonContainer' onClick={fetchSearchResults}>Search</div>
             </div>
             <ul className="responsive-table">
                 <li className="table-header">
